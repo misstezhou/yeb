@@ -49,6 +49,6 @@ public class RespBean {
      * @param obj
      */
     public static RespBean error(String message,Object obj){
-        return new RespBean(500,message,null);
+        return new RespBean(500,message,obj);
     }
 }

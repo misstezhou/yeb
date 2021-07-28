@@ -6,6 +6,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+/**
+ * 用户登录实体类
+ *
+ * @author mikes
+ * @since 1.0.0
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

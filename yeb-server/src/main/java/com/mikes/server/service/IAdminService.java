@@ -12,7 +12,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IAdminService extends IService<Admin> {
 
-    RespBean login(String username, String password, String code, HttpServletRequest request);
+    /**
+     * 登陆之后返回token
+     * @author mikes
+     * @date 2021/7/27 16:54
+     */
+    RespBean login(String username, String password,String code, HttpServletRequest request);
 
     /**
      *  根据用户名获取用户

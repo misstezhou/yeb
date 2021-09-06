@@ -1,13 +1,14 @@
 package com.mikes.server.config.security;
 
 
+import com.mikes.server.config.jwt.JwtAuthenticationTokenFilter;
+import com.mikes.server.config.jwt.RestAuthorizationEntryPoint;
+import com.mikes.server.config.jwt.RestfulAccessDeniedHandler;
 import com.mikes.server.pojo.Admin;
 import com.mikes.server.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,7 +17,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**

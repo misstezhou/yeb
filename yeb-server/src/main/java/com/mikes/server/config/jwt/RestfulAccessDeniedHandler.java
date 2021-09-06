@@ -1,4 +1,4 @@
-package com.mikes.server.config.security;
+package com.mikes.server.config.jwt;
 
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;

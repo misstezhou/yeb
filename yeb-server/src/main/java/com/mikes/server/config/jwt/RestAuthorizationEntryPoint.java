@@ -1,4 +1,4 @@
-package com.mikes.server.config.security;
+package com.mikes.server.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mikes.server.pojo.RespBean;

@@ -1,4 +1,4 @@
-package com.mikes.server.config;
+package com.mikes.server.config.jwt;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

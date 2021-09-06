@@ -3,7 +3,7 @@ package com.mikes.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.mikes.server.config.JwtTokenUtil;
+import com.mikes.server.config.jwt.JwtTokenUtil;
 import com.mikes.server.mapper.AdminMapper;
 import com.mikes.server.pojo.Admin;
 import com.mikes.server.pojo.RespBean;
@@ -58,8 +58,15 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      */
     @Override
     public RespBean login(String username, String password,String code,HttpServletRequest request) {
+        //验证验证码
+        String captcha = (String) request.getSession().getAttribute("captcha");
+        if (StringUtils.isEmpty(code)|| !captcha.equals(code)){
+            return RespBean.error("验证码填写错误");
+        }
         //登录
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        System.out.println(username);
+
         if (null == userDetails || !passwordEncoder.matches(password,userDetails.getPassword())){
             return RespBean.error("用户名或密码不正确");
         }
@@ -76,7 +83,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         Map<String,Object> tokenMap = new HashMap<>();
         tokenMap.put("token",token);
         tokenMap.put("tokenHead",tokenHead);
-        return RespBean.success("登陆成功",tokenMap );
+        return RespBean.success("登陆成功",tokenMap);
     }
 
     @Override

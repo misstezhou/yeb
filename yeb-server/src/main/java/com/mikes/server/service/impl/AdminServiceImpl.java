@@ -5,9 +5,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.mikes.server.config.jwt.JwtTokenUtil;
 import com.mikes.server.mapper.AdminMapper;
+import com.mikes.server.mapper.AdminRoleMapper;
+import com.mikes.server.mapper.RoleMapper;
 import com.mikes.server.pojo.Admin;
+import com.mikes.server.pojo.AdminRole;
 import com.mikes.server.pojo.RespBean;
+import com.mikes.server.pojo.Role;
 import com.mikes.server.service.IAdminService;
+import com.mikes.server.utils.AdminUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,6 +53,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private String tokenHead;
     @Autowired
     private AdminMapper adminMapper;
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private AdminRoleMapper adminRoleMapper;
 
     /**
      * 登陆之后返回token
@@ -89,5 +98,64 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public Admin getAdminByUserName(String username) {
         return adminMapper.selectOne(new QueryWrapper<Admin>().eq("username",username).eq("enabled",true));
+    }
+
+    /**
+     * 根据用户id查询角色列表
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Role> getRoles(Integer adminId) {
+        return roleMapper.getRoles(adminId);
+    }
+
+    /**
+     * 获取所有操作员
+     * @param keywords
+     * @return
+     */
+    @Override
+    public List<Admin> getAllAdmins(String keywords) {
+        return adminMapper.getAllAdmins(AdminUtils.getCurrentAdmin().getId(),keywords);
+    }
+
+    /**
+     * 更新操作员
+     * @param adminId
+     * @param rids
+     * @return
+     */
+    @Override
+    @Transactional
+    public RespBean updateAdminRole(Integer adminId, Integer[] rids) {
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().eq("adminId",adminId));
+        Integer result = adminRoleMapper.addAdminRole(adminId,rids);
+        if(rids.length == result){
+            return RespBean.success("更新成功");
+        }
+        return RespBean.error("更新失败");
+    }
+
+    /**
+     * 更新用户密码
+     * @param oldPass
+     * @param pass
+     * @param adminId
+     * @return
+     */
+    @Override
+    public RespBean updateAdminPassword(String oldPass, String pass, Integer adminId) {
+        Admin admin = adminMapper.selectById(adminId);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        //判断旧密码是否正确
+        if(encoder.matches(oldPass,admin.getPassword())){
+            admin.setPassword(encoder.encode(pass));
+            int result = adminMapper.updateById(admin);
+            if(1 == result){
+                return RespBean.success("更新成功");
+            }
+        }
+        return RespBean.success("更新失败");
     }
 }

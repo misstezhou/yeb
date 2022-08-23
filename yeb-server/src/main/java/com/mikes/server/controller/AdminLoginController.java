@@ -6,7 +6,7 @@ import com.mikes.server.pojo.RespBean;
 import com.mikes.server.service.IAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +40,7 @@ public class AdminLoginController {
         String username = principal.getName();
        Admin admin = adminService.getAdminByUserName(username);
        admin.setPassword(null);
+       admin.setRoles(adminService.getRoles(admin.getId()));
        return admin;
     }
 

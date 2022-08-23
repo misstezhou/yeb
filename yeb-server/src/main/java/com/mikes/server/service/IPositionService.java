@@ -12,6 +12,7 @@ import com.mikes.server.pojo.Position;
  * @author zhanglishen
  * @since 2021-07-22
  */
+
 public interface IPositionService extends IService<Position> {
 
 }
